@@ -19,7 +19,7 @@ RUN wget --directory-prefix=/usr/share/keyrings https://packages.microsoft.com/k
 		wget -O /usr/share/keyrings/kubernetes-key.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg; \
 		sh -c "echo 'deb [signed-by=/usr/share/keyrings/kubernetes-key.gpg] https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list"; \
 		apt-get update; \
-		apt-get install -y --no-install-recommends powershell kubectl; \
+		apt-get install -y --no-install-recommends powershell kubectl openssh-server; \
 		apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["pwsh"]
