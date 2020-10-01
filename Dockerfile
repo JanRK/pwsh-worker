@@ -7,7 +7,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_TELEMETRY_OPTOUT=1
 
 RUN apt-get update; \
-        apt-get install -y --no-install-recommends wget ca-certificates tzdata software-properties-common apt-transport-https unzip curl gnupg libunwind8 nano httpie mtr iputils-ping iputils-tracepath traceroute mtr iproute2 dnsutils; \
+        apt-get install -y --no-install-recommends wget ca-certificates tzdata software-properties-common apt-transport-https unzip curl gnupg libunwind8 nano httpie mtr iputils-ping iputils-tracepath traceroute mtr iproute2 dnsutils netcat; \
 		apt-get upgrade; \
         apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
 
