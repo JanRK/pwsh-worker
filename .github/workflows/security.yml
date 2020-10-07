@@ -7,11 +7,11 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  codacy-analysis-cli:
     runs-on: ubuntu-latest
-
+    name: Codacy Analysis CLI
     steps:
-      - uses: actions/checkout@v2
-
-      - name: CodeScan Scanner
-        uses: codescan-io/codescan-scanner-action@1.2
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Run codacy-analysis-cli
+        uses: codacy/codacy-analysis-cli-action@master
