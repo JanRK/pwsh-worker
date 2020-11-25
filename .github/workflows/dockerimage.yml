@@ -3,7 +3,7 @@ name: Docker Test-Publish
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 0 */7 * *'
+    - cron:  '0 1 */7 * *'
   push:
     # Publish `master` as Docker `latest` image.
     branches:
