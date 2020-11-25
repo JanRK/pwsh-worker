@@ -1,13 +1,29 @@
 FROM debian:stable-slim
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV POWERSHELL_CLI_TELEMETRY_OPTOUT=1
-ENV POWERSHELL_TELEMETRY_OPTOUT=1
-ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
-ENV DOTNET_TELEMETRY_OPTOUT=1
+ENV DEBIAN_FRONTEND=noninteractive \
+		POWERSHELL_CLI_TELEMETRY_OPTOUT=1 \
+		POWERSHELL_TELEMETRY_OPTOUT=1 \
+		DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+		DOTNET_TELEMETRY_OPTOUT=1
 
 RUN apt-get update; \
-        apt-get install -y --no-install-recommends wget ca-certificates tzdata software-properties-common apt-transport-https unzip curl gnupg libunwind8 nano httpie mtr iputils-ping iputils-tracepath traceroute mtr iproute2 dnsutils netcat; \
+		apt-get install -y --no-install-recommends apt-transport-https ca-certificates; \
+		apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*; \
+		aptlists=$(find /etc/apt -type f -name "*.list"); \
+		for filename in $aptlists; do \
+		sed -i 's|http://ftp.acc.umu.se|https://deb.debian.org|g' $filename; \
+		sed -i 's|http://ftp.debian.org|https://deb.debian.org|g' $filename; \
+		sed -i 's|http://deb.debian.org|https://deb.debian.org|g' $filename; \
+		sed -i 's|http://storage.googleapis.com|https://storage.googleapis.com|g' $filename; \
+		sed -i 's|http://packages.cloud.google.com|https://packages.cloud.google.com|g' $filename; \
+		sed -i 's|http://apt.llvm.org|https://apt.llvm.org|g' $filename; \
+		sed -i 's|http://repo.mysql.com|https://repo.mysql.com|g' $filename; \
+		sed -i 's|http://apt.postgresql.org|https://apt.postgresql.org|g' $filename; \
+		done
+
+
+RUN apt-get update; \
+        apt-get install -y --no-install-recommends wget tzdata software-properties-common unzip curl gnupg libunwind8 nano httpie mtr iputils-ping iputils-tracepath traceroute mtr iproute2 dnsutils netcat git; \
 		apt-get upgrade; \
         apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
 
