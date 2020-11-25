@@ -4,7 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 		POWERSHELL_CLI_TELEMETRY_OPTOUT=1 \
 		POWERSHELL_TELEMETRY_OPTOUT=1 \
 		DOTNET_CLI_TELEMETRY_OPTOUT=1 \
-		DOTNET_TELEMETRY_OPTOUT=1
+		DOTNET_TELEMETRY_OPTOUT=1 \
+		POWERSHELL_UPDATECHECK=Off
 
 RUN apt-get update; \
 		apt-get install -y --no-install-recommends apt-transport-https ca-certificates; \
