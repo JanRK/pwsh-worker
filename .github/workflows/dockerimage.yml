@@ -52,8 +52,7 @@ jobs:
           echo "${{ secrets.DOCKER_TOKEN }}" | docker login --username ${{ secrets.DOCKER_USER }} --password-stdin
           echo "${{ secrets.QUAY_TOKEN }}" | docker login quay.io --username ${{ secrets.QUAY_USER }} --password-stdin
 
-
-      - name: Push image to quay.io
+      - name: Push image to docker.io and quay.io
         run: |
           IMAGE_ID=${GITHUB_REPOSITORY,,}
           # Strip git ref prefix from version
