@@ -48,9 +48,11 @@ jobs:
         run: docker build . --file Dockerfile --tag ${GITHUB_REPOSITORY,,}
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+        run: |
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login --username ${{ secrets.DOCKER_USER }} --password-stdin
+          echo "${{ secrets.QUAY_TOKEN }}" | docker login quay.io --username ${{ secrets.QUAY_USER }} --password-stdin
 
-      - name: Push image
+      - name: Push image to quay.io
         run: |
           IMAGE_ID=${GITHUB_REPOSITORY,,}
           # Strip git ref prefix from version
@@ -61,5 +63,6 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag ${GITHUB_REPOSITORY,,} $IMAGE_ID:$VERSION
+          QUAYACCOUNT=${{ secrets.QUAY_ACCOUNT }}
+          docker tag $IMAGE_ID quay.io/$QUAYACCOUNT/$IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
