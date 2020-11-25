@@ -63,7 +63,6 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          QUAYACCOUNT=${{ secrets.QUAY_ACCOUNT }}
           docker tag $IMAGE_ID $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
           docker tag $IMAGE_ID quay.io/$IMAGE_ID:$VERSION
