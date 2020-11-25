@@ -65,5 +65,5 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           QUAYACCOUNT=${{ secrets.QUAY_ACCOUNT }}
-          docker tag $IMAGE_ID quay.io/$QUAYACCOUNT/$IMAGE_ID:$VERSION
-          docker push quay.io/$QUAYACCOUNT/$IMAGE_ID:$VERSION
+          docker tag $IMAGE_ID quay.io/$IMAGE_ID:$VERSION
+          docker push quay.io/$IMAGE_ID:$VERSION
