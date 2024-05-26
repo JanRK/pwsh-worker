@@ -1,10 +1,10 @@
 FROM quay.io/janrk/pwsh-slim
 
 RUN apt-get update; \
-        apt-get install -y --no-install-recommends wget tzdata software-properties-common unzip curl gnupg libunwind8 nano httpie iputils-ping iputils-tracepath traceroute iproute2 dnsutils netcat-openbsd git; \
+	        apt-get install -y --no-install-recommends wget tzdata software-properties-common unzip curl gnupg libunwind8 nano httpie iputils-ping iputils-tracepath traceroute iproute2 dnsutils netcat-openbsd git; \
 		# apt-get install -y --no-install-recommends mtr
 		apt-get upgrade; \
-        apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
+	        apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
 
 # Kubernetes
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
