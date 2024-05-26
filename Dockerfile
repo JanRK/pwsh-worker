@@ -7,9 +7,10 @@ RUN apt-get update; \
         apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
 
 # Kubernetes
-RUN wget -O /usr/share/keyrings/kubernetes-key.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg; \
-		. /etc/os-release; \
-		sh -c "echo 'deb [signed-by=/usr/share/keyrings/kubernetes-key.gpg] https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list"; \
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
+		chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
+  		echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list; \
+		sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list; \
 		apt-get update; \
-		apt-get install -y --no-install-recommends kubectl openssh-server; \
+		apt-get install -y --no-install-recommends kubectl; \
 		apt-get purge -y --auto-remove; apt-get clean; rm -rf /var/lib/apt/lists/*
