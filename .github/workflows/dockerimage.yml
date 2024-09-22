@@ -28,7 +28,7 @@ jobs:
         id: tags
         shell: pwsh
         run: |
-          $test = "tag:" + ($env:GITHUB_REPOSITORY).ToLower() 
+          $test = "tag=" + ($env:GITHUB_REPOSITORY).ToLower() 
           write-host $test
           $test >> "$GITHUB_OUTPUT"
 
