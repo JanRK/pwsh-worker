@@ -25,9 +25,19 @@ jobs:
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV        
 
       - name: Get Tags
+        id: tags
         shell: pwsh
         run: |
-          Get-ChildItem env: | ConvertTo-Json
+          $test = "tag:" + ($env:GITHUB_REPOSITORY).ToLower() 
+          write-host $test
+          $test >> "$GITHUB_OUTPUT"
+
+      - name: Later Step
+        run: echo ${{ steps.tags.outputs.tag }}
+  
+      - name: Stop
+        shell: pwsh
+        run: |
           Write-Error "Stop"
 
       - uses: actions/checkout@v4
