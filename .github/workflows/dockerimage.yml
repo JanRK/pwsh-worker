@@ -7,8 +7,7 @@ on:
     - cron:  '0 0 */7 * *'
 
 env:
-  REGISTRY_NAME: ${GITHUB_REPOSITORY,,}
-  REGISTRY_IMAGE: quay.io/$REGISTRY_NAME
+  REGISTRY_IMAGE: ${format('{{quay.io/ {0}}}', ${GITHUB_REPOSITORY,,})}
 
 jobs:
   build:
@@ -18,9 +17,9 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          - linux/arm/v6
-          - linux/arm/v7
-          - linux/arm64
+          # - linux/arm/v6
+          # - linux/arm/v7
+          # - linux/arm64
 
     steps:
       - name: Prepare
