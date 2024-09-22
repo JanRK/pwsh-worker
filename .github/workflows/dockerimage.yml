@@ -104,6 +104,14 @@ jobs:
           pattern: digests-*
           merge-multiple: true
 
+      - name: Get Tags
+        id: tags
+        shell: pwsh
+        run: |
+          $test = "REGISTRY_IMAGE=quay.io/" + ($env:GITHUB_REPOSITORY).ToLower() 
+          write-host $test
+          $test >> $env:GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
