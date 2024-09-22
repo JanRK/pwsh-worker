@@ -28,7 +28,7 @@ jobs:
         id: tags
         shell: pwsh
         run: |
-          $test = "REGISTRY_IMAGE=" + ($env:GITHUB_REPOSITORY).ToLower() 
+          $test = "REGISTRY_IMAGE=quay.io/" + ($env:GITHUB_REPOSITORY).ToLower() 
           write-host $test
           $test >> $env:GITHUB_OUTPUT
 
