@@ -30,7 +30,7 @@ jobs:
         run: |
           $test = "tag=" + ($env:GITHUB_REPOSITORY).ToLower() 
           write-host $test
-          $test >> "$GITHUB_OUTPUT"
+          bash -c "$test >> $GITHUB_OUTPUT"
 
       - name: Later Step
         run: echo ${{ steps.tags.outputs.tag }}
@@ -38,6 +38,7 @@ jobs:
       - name: Stop
         shell: pwsh
         run: |
+          write-host ${{ steps.tags.outputs.tag }}
           Write-Error "Stop"
 
       - uses: actions/checkout@v4
