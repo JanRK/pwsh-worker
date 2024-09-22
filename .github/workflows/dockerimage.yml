@@ -7,7 +7,7 @@ on:
     - cron:  '0 0 */7 * *'
 
 env:
-  REGISTRY_IMAGE: quay.io/${{github.repository,,}}
+  REGISTRY_IMAGE: quay.io/${GITHUB_REPOSITORY,,}
 
 jobs:
   build:
