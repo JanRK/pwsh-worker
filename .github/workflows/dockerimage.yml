@@ -30,7 +30,7 @@ jobs:
         run: |
           $test = "tag=" + ($env:GITHUB_REPOSITORY).ToLower() 
           write-host $test
-          bash -c "$test >> $env:GITHUB_OUTPUT"
+          $test >> $env:GITHUB_OUTPUT
 
       - name: Later Step
         run: echo ${{ steps.tags.outputs.tag }}
