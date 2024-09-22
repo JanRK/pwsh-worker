@@ -28,18 +28,18 @@ jobs:
         id: tags
         shell: pwsh
         run: |
-          $test = "tag=" + ($env:GITHUB_REPOSITORY).ToLower() 
+          $test = "REGISTRY_IMAGE=" + ($env:GITHUB_REPOSITORY).ToLower() 
           write-host $test
           $test >> $env:GITHUB_OUTPUT
 
       - name: Later Step
-        run: echo ${{ steps.tags.outputs.tag }}
+        run: echo ${{ steps.tags.outputs.REGISTRY_IMAGE }}
   
       - name: Stop
         shell: pwsh
         run: |
-          write-host ${{ steps.tags.outputs.tag }}
-          Write-Error "Stop"
+          write-host ${{ steps.tags.outputs.REGISTRY_IMAGE }}
+          # Write-Error "Stop"
 
       - uses: actions/checkout@v4
 
@@ -55,7 +55,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ env.REGISTRY_IMAGE }}
+            ${{ steps.tags.outputs.REGISTRY_IMAGE }}
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -76,7 +76,7 @@ jobs:
         with:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ steps.tags.outputs.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
@@ -111,7 +111,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ${{ steps.tags.outputs.REGISTRY_IMAGE }}
 
       - name: Log into registry
         run: |
@@ -121,8 +121,8 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)          
+            $(printf '${{ steps.tags.outputs.REGISTRY_IMAGE }}@sha256:%s ' *)          
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ steps.tags.outputs.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
