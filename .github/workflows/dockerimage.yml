@@ -11,25 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Build image
-        run: docker build . --file Dockerfile --tag ${GITHUB_REPOSITORY,,}
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       - name: Log into registry
         run: |
           echo "${{ secrets.QUAY_TOKEN }}" | docker login quay.io --username ${{ secrets.QUAY_USER }} --password-stdin
 
-      - name: Push image to quay.io
-        run: |
-          IMAGE_ID=${GITHUB_REPOSITORY,,}
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_ID quay.io/$IMAGE_ID:$VERSION
-          docker push quay.io/$IMAGE_ID:$VERSION
+
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: quay.io/${GITHUB_REPOSITORY,,}:latest,quay.io/${GITHUB_REPOSITORY,,}:${{ github.run_number }}
+          platforms: linux/amd64,linux/arm64/v8
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
